@@ -15,7 +15,19 @@ decision API, without touching the main program, its image, or its container.
    - `score` — urgency: routine / worth watching / act now
 4. Write a markdown table with one row per item.
 
-## Run
+## Daily run (`run_daily.sh`, cron 18:40 Beijing = 10:40 UTC)
+
+1. `scp` today's per-stock reports (`report_YYYYMMDD_*.md`) **and** the combined
+   dashboard (`report_YYYYMMDD.md`) from the stock host.
+2. Fallback: the 18:00 scheduled stock run only writes the combined dashboard —
+   per-stock files exist only when analysis is run manually from the WebUI
+   watchlist. When no per-stock files were pulled, `split_combined.py` splits
+   the combined dashboard by `## <name> (<code>)` section into per-stock files
+   (existing per-stock files are never overwritten).
+3. `laya_classify.py` classifies each per-stock file → `out/laya_YYYYMMDD_<code>.md`.
+4. `render_site.py` rebuilds the history site.
+
+## Run (single file)
 
 ```bash
 python3 laya_classify.py ~/dsa/reports/report_20261026_000572.md \
